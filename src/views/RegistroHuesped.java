@@ -7,6 +7,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.toedter.calendar.JDateChooser;
+
+import controller.HuespedController;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -19,7 +22,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.SQLException;
 import java.text.Format;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
@@ -37,7 +43,11 @@ public class RegistroHuesped extends JFrame {
 	private JComboBox<Format> txtNacionalidad;
 	private JLabel labelExit;
 	private JLabel labelAtras;
+	private JLabel labelGuardar;
+	private JPanel btnguardar;
 	int xMouse, yMouse;
+
+
 
 	/**
 	 * Launch the application.
@@ -248,7 +258,7 @@ public class RegistroHuesped extends JFrame {
 		separator_1_2_5.setBackground(new Color(12, 138, 199));
 		contentPane.add(separator_1_2_5);
 		
-		JPanel btnguardar = new JPanel();
+		btnguardar = new JPanel();
 		btnguardar.setBounds(723, 560, 122, 35);
 		btnguardar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -260,7 +270,26 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(btnguardar);
 		btnguardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		
-		JLabel labelGuardar = new JLabel("GUARDAR");
+		labelGuardar = new JLabel("GUARDAR");
+		labelGuardar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+//		        String nacionalidad = (String)txtNacionalidad.getSelectedItem();
+//		        int numeroReserva = Integer.parseInt(txtNreserva.getText());
+//		        LocalDate fechaNacimiento = txtFechaN.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//		        
+//		        System.out.println("entro aquí en registro");
+//				try {
+//					registrarHuesped(txtNombre.getText(), txtApellido.getText(), fechaNacimiento,
+//							nacionalidad, txtTelefono.getText(),numeroReserva);
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+			}
+		});
 		labelGuardar.setHorizontalAlignment(SwingConstants.CENTER);
 		labelGuardar.setForeground(Color.WHITE);
 		labelGuardar.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -327,5 +356,78 @@ public class RegistroHuesped extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 }
+	    
+	    public void registrarHuesped(String nombre, String apellido, LocalDate fecNacimiento, String Nacionalidad
+				   , String telefono, int idReserva) throws SQLException {
+
+	    	HuespedController huesped = new HuespedController();
+	    	huesped.registrarHuesped(nombre, apellido, fecNacimiento, Nacionalidad, telefono, idReserva);
+	    }
+	    
+		public JTextField getTxtNreserva() {
+			return this.txtNreserva;
+		}
+
+		public void setTxtNreserva(JTextField txtNreserva) {
+			this.txtNreserva = txtNreserva;
+		}
+
+		public JTextField getTxtNombre() {
+			return this.txtNombre;
+		}
+
+		public void setTxtNombre(JTextField txtNombre) {
+			this.txtNombre = txtNombre;
+		}
+
+		public JPanel getBtnguardar() {
+			return this.btnguardar;
+		}
+
+		public void setBtnguardar(JPanel btnguardar) {
+			this.btnguardar = btnguardar;
+		}
+
+		public JLabel getLabelGuardar() {
+			return this.labelGuardar;
+		}
+
+		public void setLabelGuardar(JLabel labelGuardar) {
+			this.labelGuardar = labelGuardar;
+		}
+
+		public JTextField getTxtApellido() {
+			return this.txtApellido;
+		}
+
+		public void setTxtApellido(JTextField txtApellido) {
+			this.txtApellido = txtApellido;
+		}
+
+		public JTextField getTxtTelefono() {
+			return txtTelefono;
+		}
+
+		public void setTxtTelefono(JTextField txtTelefono) {
+			this.txtTelefono = txtTelefono;
+		}
+
+		public JDateChooser getTxtFechaN() {
+			return this.txtFechaN;
+		}
+
+		public void setTxtFechaN(JDateChooser txtFechaN) {
+			this.txtFechaN = txtFechaN;
+		}
+
+		public JComboBox<Format> getTxtNacionalidad() {
+			return this.txtNacionalidad;
+		}
+
+		public void setTxtNacionalidad(JComboBox<Format> txtNacionalidad) {
+			this.txtNacionalidad = txtNacionalidad;
+		}
+		
+		
 											
 }

@@ -10,12 +10,23 @@ import dao.ReservaDAO;
 public class ReservaController {
 	private ReservaDAO reservaDAO;
 	
-	   public ReservaController() {
+
+		public ReservaController() {
 	        var factory = new Conexion(); 
 	        this.reservaDAO = new ReservaDAO(factory.getConnection());
 	    }
 	   
-	   public void registrarReserva(LocalDate fecEntrada, LocalDate fecSalida, int total,String formaPago) throws SQLException {
-		   reservaDAO.registrarReserva(fecEntrada, fecSalida, total,formaPago);
+	   public int registrarReserva(LocalDate fecEntrada, LocalDate fecSalida, int total,String formaPago) throws SQLException {
+		  int fkKey =  reservaDAO.registrarReserva(fecEntrada, fecSalida, total,formaPago);
+		  return fkKey;
 	   }
+	   
+	   
+		public ReservaDAO getReservaDAO() {
+			return this.reservaDAO;
+		}
+
+		public void setReservaDAO(ReservaDAO reservaDAO) {
+			this.reservaDAO = reservaDAO;
+		}
 }

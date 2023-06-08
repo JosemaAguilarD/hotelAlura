@@ -14,6 +14,7 @@ import com.toedter.calendar.JDateChooser;
 
 import controller.HuespedController;
 import controller.ReservaController;
+import dao.HuespedDAO;
 import dao.ReservaDAO;
 
 import java.awt.Font;
@@ -29,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeListener;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JSeparator;
@@ -333,6 +335,7 @@ public class ReservasView extends JFrame {
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
 			        tipoPago = (String)txtFormaPago.getSelectedItem();
 
+			        
 			        try {
 						registrar(entrada, salida, totalPrecio ,tipoPago);
 						
@@ -342,14 +345,8 @@ public class ReservasView extends JFrame {
 						System.out.println("falló");
 						e1.printStackTrace();
 					}
-					
-					 MenuUsuario menu = new MenuUsuario();
-			            menu.setVisible(true);
-			            dispose();	 
-					
-					
-					RegistroHuesped registro = new RegistroHuesped();
-					registro.setVisible(true);
+		
+
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
 				}
@@ -364,10 +361,75 @@ public class ReservasView extends JFrame {
 
 	}
 	private void registrar(LocalDate fecEntrada, LocalDate fecSalida, int total,String formaPago) throws SQLException {
-		 
-			ReservaController reserva = new ReservaController();
-			reserva.registrarReserva(fecEntrada, fecSalida, total, formaPago);
-	}
+		
+		ReservaController reserva = new ReservaController();
+		Connection conexion = reserva.getReservaDAO().getCon();
+		HuespedController huesped = new HuespedController(conexion);
+		RegistroHuesped registro = new RegistroHuesped();
+		
+		
+//		Inicio la transacción
+	    conexion.setAutoCommit(false);
+//		Obtengo el último id y lo seteo en la vista de Huesped
+			String ultimoId = String.valueOf(reserva.getReservaDAO().obtenerUltimoId());
+			registro.getTxtNreserva().setText(ultimoId);
+			
+	        setVisible(false);
+
+// 		Muestro la nueva pantalla	        
+			registro.setVisible(true);
+			
+
+			registro.getLabelGuardar().addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+
+					 	String nacionalidad = (String)registro.getTxtNacionalidad().getSelectedItem();
+				        int numeroReserva = Integer.parseInt(ultimoId);
+				        LocalDate fechaNacimiento = registro.getTxtFechaN().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				        
+						try {
+							
+							int fkKey = reserva.registrarReserva(fecEntrada, fecSalida, total, formaPago);
+							
+							huesped.registrarHuesped(registro.getTxtNombre().getText(), registro.getTxtApellido().getText(), 
+									fechaNacimiento, nacionalidad, registro.getTxtTelefono().getText(), fkKey);
+							
+							conexion.commit();
+							System.out.println("Se registró la reserva y el huesped " + fkKey);
+					        System.exit(0);
+
+							
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+							if (conexion != null) {
+								try {
+									conexion.close();
+								} catch (SQLException e3) {
+									// TODO Auto-generated catch block
+									e3.printStackTrace();
+								}
+				            }
+							
+						}
+						finally {
+
+							if (conexion != null) {
+								try {
+									conexion.close();
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+				            }
+						}
+				}
+			}
+			
+					);
+		}
+	
 		
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
