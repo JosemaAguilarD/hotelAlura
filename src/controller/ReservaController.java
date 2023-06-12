@@ -2,6 +2,7 @@ package controller;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import conexion.Conexion;
 import dao.HuespedDAO;
@@ -21,6 +22,11 @@ public class ReservaController {
 		  return fkKey;
 	   }
 	   
+	   public List<Object[]> listarReserva(){
+		   return reservaDAO.listarReservas();
+	   }
+	   
+	   
 	   
 		public ReservaDAO getReservaDAO() {
 			return this.reservaDAO;
@@ -29,4 +35,6 @@ public class ReservaController {
 		public void setReservaDAO(ReservaDAO reservaDAO) {
 			this.reservaDAO = reservaDAO;
 		}
+		
+		
 }

@@ -357,6 +357,13 @@ public class ReservasView extends JFrame {
 		btnsiguiente.setBounds(238, 493, 122, 35);
 		panel.add(btnsiguiente);
 		btnsiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		
+		JLabel lblSiguiente_1 = new JLabel("SIGUIENTE");
+		lblSiguiente_1.setBounds(0, 0, 122, 35);
+		btnsiguiente.add(lblSiguiente_1);
+		lblSiguiente_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSiguiente_1.setForeground(Color.WHITE);
+		lblSiguiente_1.setFont(new Font("Dialog", Font.PLAIN, 18));
 
 
 	}
@@ -442,5 +449,4 @@ public class ReservasView extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 	    }
-	 
 }

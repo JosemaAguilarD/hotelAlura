@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import conexion.Conexion;
 import dao.HuespedDAO;
@@ -31,5 +32,8 @@ public class HuespedController {
 		   huespedDao.registrarHuesped(nombre, apellido, fecNacimiento, Nacionalidad, telefono, idReserva);
 	   }
 	   
+	   public List<Object[]> listarHuespedes(){
+		   return huespedDao.listarHuespedes();
+	   }
 	
 }

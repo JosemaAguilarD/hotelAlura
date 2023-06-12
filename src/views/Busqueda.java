@@ -6,6 +6,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import controller.HuespedController;
+import controller.ReservaController;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -101,6 +105,9 @@ public class Busqueda extends JFrame {
 		modelo.addColumn("Fecha Check Out");
 		modelo.addColumn("Valor");
 		modelo.addColumn("Forma de Pago");
+		for (Object[] valor : listaReservas()) {
+			modelo.addRow(valor);
+	    }
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
@@ -109,6 +116,7 @@ public class Busqueda extends JFrame {
 		tbHuespedes = new JTable();
 		tbHuespedes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tbHuespedes.setFont(new Font("Roboto", Font.PLAIN, 16));
+		//Desafult Table Model
 		modeloHuesped = (DefaultTableModel) tbHuespedes.getModel();
 		modeloHuesped.addColumn("Número de Huesped");
 		modeloHuesped.addColumn("Nombre");
@@ -117,6 +125,11 @@ public class Busqueda extends JFrame {
 		modeloHuesped.addColumn("Nacionalidad");
 		modeloHuesped.addColumn("Telefono");
 		modeloHuesped.addColumn("Número de Reserva");
+		for (Object[] valor : listaHuespedes()) {
+			modeloHuesped.addRow(valor);
+	    }
+//		Object[] rowData = {"123", "Juan", "Pérez", "1990-01-01", "Argentina", "555-1234", "456"};
+//		modeloHuesped.addRow(rowData);
 		JScrollPane scroll_tableHuespedes = new JScrollPane(tbHuespedes);
 		panel.addTab("Huéspedes", new ImageIcon(Busqueda.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
@@ -260,6 +273,18 @@ public class Busqueda extends JFrame {
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
 		setResizable(false);
+	}
+	
+	private List<Object[]> listaReservas() {
+		ReservaController reserva = new ReservaController();
+	    return reserva.listarReserva();
+	    
+	}
+	
+	private List<Object[]> listaHuespedes() {
+		HuespedController huesped = new HuespedController();
+	    return huesped.listarHuespedes();
+	    
 	}
 	
 //Código que permite mover la ventana por la pantalla según la posición de "x" y "y"
